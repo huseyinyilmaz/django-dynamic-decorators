@@ -8,11 +8,40 @@ Django app that enables decorators to be applied to views on the fly.
 Description
 ===========
 
-This will be an application that enables views to be decorated with list of decorators. There will be a web interface for this application. Through this interface, users will be able to choose decorators from a list and those decorators will be applied only for that specific user. That way, they will not be effecting other people.
+This will be a django application that provides a decorator interface that can be used on any function including django views. Developers will use a dynamic decorator on functions and using a web interface he/she will be changing content of the decorator. Content of decorator will be choosen by list of decorators and choosen decorators will be applied on the fly. Decorators will be applied per user. That way, they will not be effecting other people.
 
 This will be usefull for development and testing. There can be decorators that changes some settings values, disable/enable applciations like django-pipeline. So developers will be able to see errors in uncompressed format.
 
 Using python-placebo, It will be possible to mock api interfaces for current user.
+
+Interface
+=========
+
+Decorators will be initialized like following:
+
+::
+
+    from dynamicdecorator import Decorate
+
+    @Decorate.user_view
+    def users(request):
+       users = get_users()
+       ...
+
+    @Decorate.get_users
+    def get_users():
+       ...
+
+    # Here we did not specified the function name.
+    # So in this case we could use name of current function.
+    #
+    # So following two will be same
+    @Decorate
+    # @Decorate.get_profiles
+    def get_profiles():
+        ...
+
+After initialization is done
 
 Planned Features
 ================
