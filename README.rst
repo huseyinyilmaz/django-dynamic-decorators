@@ -41,7 +41,7 @@ Decorators will be initialized like following:
     def get_profiles():
         ...
 
-After initialization is done
+After initialization is done in decorators interface there will be 3 sections for each decorator. user_view , get_users and get_profiles.
 
 Planned Features
 ================
