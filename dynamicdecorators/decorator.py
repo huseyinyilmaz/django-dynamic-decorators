@@ -1,5 +1,11 @@
+"""Decorators to register a dynamic decorator.
+
+Dynamic decorators should not reach the session in initialization time because
+dynamic decorator middleware also registers itself as a decorator but we do
+not have session data when register middleware.
+"""
 from functools import partial
-# from functools import wraps
+from functools import wraps
 
 import six
 
@@ -8,17 +14,23 @@ from dynamicdecorators import config
 
 
 def _dynamic_decorator(f=None, name=None):
+    # If name is not provided try to get name from function.
     if name is None:
         name = utils.get_name(f)
-    # if no name is provided and
+    # if there is still no name raise an error and for
     if name is None:
         raise Exception(
             'No name is provided for dynamic decorator and we cannot '
             'generate a name for given function %s please provide a name '
             'for it as argument to decorator like so: '
-            '@dynamicdecorator.decorate(name="my-func-name")' % repr(f))
+            '@dynamicdecorators.decorators.my_func_name' % repr(f))
     config.register(name)
-    return f
+
+    @wraps(f)
+    def _wrapper(*args, **kwargs):
+        return f(*args, **kwargs)
+
+    return _wrapper
 
 
 def decorate(name):
@@ -26,3 +38,8 @@ def decorate(name):
         return partial(_dynamic_decorator, name=name)
     else:
         return _dynamic_decorator(name)
+
+
+class Decorators:
+    def __getattr__(self, attr_name):
+        return decorate(attr_name)

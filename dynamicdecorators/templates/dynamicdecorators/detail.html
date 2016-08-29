@@ -1,0 +1,30 @@
+{% extends "dynamicdecorators/base.html" %}
+
+{% block body %}
+
+<ul>
+  {% for d in decorators %}
+    <li>{{ d }}</li>
+  {% endfor %}
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Panel heading</div>
+    <table class="table table-bordered">
+    <tr>
+      <th>Name</th>
+      <th>Activate</th>
+      <th>Meta</th>
+    </tr>
+
+    {% for d in provided_decorators %}
+      <tr>
+        <td>{{d.name}}</td>
+        <td><a href="#" class="btn btn-info">Activate</a></td>
+        <td>{{d}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+</ul>
+{% endblock body %}
