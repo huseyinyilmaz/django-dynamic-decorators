@@ -11,6 +11,7 @@ import six
 
 from dynamicdecorators import utils
 from dynamicdecorators import config
+from dynamicdecorators import session
 
 
 def _dynamic_decorator(f=None, name=None):
@@ -28,7 +29,13 @@ def _dynamic_decorator(f=None, name=None):
 
     @wraps(f)
     def _wrapper(*args, **kwargs):
-        return f(*args, **kwargs)
+        session.get_enabled_decorators(slug)
+        mocks = []
+        if mocks:
+            func = utils.compose(*mocks)(f)
+        else:
+            func = f
+        return func(*args, **kwargs)
 
     return _wrapper
 

@@ -1,8 +1,11 @@
 from contextlib import contextmanager
-from dynamicdecorators.config import get_registered_decorators
+from dynamicdecorators.config import get_provided_decorators
+
 
 CACHE = {'request': None,
+         'dynamic_decorators': {},
          'is_changed': False}
+
 # {DYNAMIC_DECORATOR: [SOURCE_DECORATORS]}
 SESSION_KEY = 'DYNAMIC_DECORATORS'
 
@@ -11,28 +14,30 @@ def set_request(request):
     CACHE.update({'request': request,
                   'dynamic_decorators': request.session.get(SESSION_KEY, {}),
                   'is_changed': False})
+    print CACHE
 
 
 def clear_request(request):
+    if CACHE['is_changed']:
+        request.session[SESSION_KEY] = CACHE['dynamic_decorators']
     CACHE.update({'request': None,
-                  'dynamic_decorators': None,
+                  'dynamic_decorators': {},
                   'is_changed': False})
-    del CACHE['request']
 
 
 def enable_decorator(dynamic_decorator, source_decorator):
     dynamic_decorators = CACHE['dynamic_decorators']
-    sources = dynamic_decorators.set_default(dynamic_decorator, [])
+    sources = dynamic_decorators.setdefault(dynamic_decorator, [])
     if source_decorator not in sources:
-        source_decorator.append(source_decorator)
+        sources.append(source_decorator)
         CACHE['is_changed'] = True
 
 
 def disable_decorator(dynamic_decorator, source_decorator):
     dynamic_decorators = CACHE['dynamic_decorators']
-    sources = dynamic_decorators.set_default(dynamic_decorator, [])
+    sources = dynamic_decorators.setdefault(dynamic_decorator, [])
     if source_decorator in sources:
-        source_decorator.remove(source_decorator)
+        sources.remove(source_decorator)
         CACHE['is_changed'] = True
 
 
@@ -50,3 +55,10 @@ def request_store(f):
         with request_store_manager(request):
             return f(request, *args, **kwargs)
     return __wrapper__
+
+
+def get_enabled_decorators(slug):
+    decorators = get_provided_decorators()
+    enabled_slugs = CACHE['dynamic_decorators'].get(slug, [])
+    return [d for d in decorators
+            if d['slug'] in enabled_slugs]
