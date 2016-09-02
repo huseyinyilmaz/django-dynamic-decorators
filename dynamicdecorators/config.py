@@ -5,13 +5,6 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.text import slugify
 
-try:
-    from django.utils.module_loading import import_string
-except ImportError:
-    # django < 1.7
-    from django.utils.module_loading import import_by_path as import_string
-
-
 # list of registered decorators.
 DECORATORS = set()
 
@@ -61,7 +54,6 @@ def get_provided_decorators():
         if 'group' not in d:
             d['group'] = ''
         d['slug'] = slugify(d['name'])
-        d['loaded_function'] = import_string(d['function'])
         if any(e for e in PROVIDED_DECORATORS
                if d['slug'] == e['slug']):
             raise ImproperlyConfigured(

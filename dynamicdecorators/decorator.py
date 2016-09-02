@@ -8,6 +8,7 @@ from functools import partial
 from functools import wraps
 
 import six
+from django.utils.text import slugify
 
 from dynamicdecorators import utils
 from dynamicdecorators import config
@@ -25,14 +26,16 @@ def _dynamic_decorator(f=None, name=None):
             'generate a name for given function %s please provide a name '
             'for it as argument to decorator like so: '
             '@dynamicdecorators.decorators.my_func_name' % repr(f))
-    config.register(name)
+    slug = slugify(name)
+    config.register(slug)
 
     @wraps(f)
     def _wrapper(*args, **kwargs):
-        session.get_enabled_decorators(slug)
-        mocks = []
+        mocks = session.get_enabled_decorators(slug)
         if mocks:
-            func = utils.compose(*mocks)(f)
+            print('apply_mocks %s' % mocks)
+            func = utils.compose(*(utils.import_function(m['function'])
+                                   for m in mocks))(f)
         else:
             func = f
         return func(*args, **kwargs)

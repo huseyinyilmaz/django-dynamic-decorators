@@ -1,3 +1,10 @@
+try:
+    from django.utils.module_loading import import_string
+except ImportError:
+    # django < 1.7
+    from django.utils.module_loading import import_by_path as import_string
+
+
 def compose(*fs):
     """compose(*functions) -> function.
 
@@ -47,3 +54,11 @@ def get_name(func):
                                     func.func_code.co_firstlineno)
     else:
         return None
+
+
+@memoize
+def import_function(path):
+    """Gets path of function as string imports it dynamicly.
+       Functions are memoized so they will be loaded only once.
+    """
+    return import_string(path)
