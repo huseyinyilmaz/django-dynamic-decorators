@@ -22,8 +22,16 @@
             <a href="{% url "dynamicdecorators-enable" slug d.slug %}"
                class="btn btn-info">Activate</a>
           {% endif %}
-</td>
-        <td>{{d}}</td>
+        </td>
+        <td>
+          <table class="table table-condensed table-bordered">
+            {% for k,v in d.iteritems %}
+              {% if k not in generic_keys and v %}
+                <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+              {% endif %}
+          {% endfor %}
+          </table>
+        </td>
       </tr>
     {% endfor %}
     </table>

@@ -21,23 +21,23 @@ Decorators will be initialized like following:
 
 ::
 
-    from dynamicdecorator import Decorate
+    from dynamicdecorator import decorators
 
-    @Decorate.user_view
+    @decorators.user_view
     def users(request):
        users = get_users()
        ...
 
-    @Decorate.get_users
+    @decorators.get_users
     def get_users():
        ...
 
     # Here we did not specified the function name.
-    # So in this case we could use name of current function.
+    # In this case, function_path will be used of current function.
     #
     # So following two will be same
-    @Decorate
-    # @Decorate.get_profiles
+    @decorators
+    # @decorators.get_profiles
     def get_profiles():
         ...
 

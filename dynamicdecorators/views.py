@@ -7,14 +7,18 @@ from dynamicdecorators import config
 from dynamicdecorators import session
 
 
+def get_general_context():
+    return {'decorators': [(d, len(session.get_enabled_decorators(d)))
+                           for d in config.get_registered_decorators()],
+    }
+
+
 class IndexView(View):
 
     template_name = 'dynamicdecorators/index.html'
 
     def get(self, request):
-        ctx = {'decorators': config.get_registered_decorators(),
-               'provided_decorators': config.get_provided_decorators(),
-               }
+        ctx = get_general_context()
         return render(request, self.template_name, ctx)
 
 
@@ -28,9 +32,22 @@ class DetailView(View):
         provided_decorators = config.get_provided_decorators()
         for p in provided_decorators:
             p['enabled'] = (p['slug'] in enabled_slugs)
-        ctx = {'decorators': config.get_registered_decorators(),
-               'provided_decorators': provided_decorators,
-               'slug': slug}
+        ctx = get_general_context()
+        ctx.update({'slug': slug,
+                    'generic_keys': ['function', 'enabled', 'name', 'slug'],
+                    'provided_decorators': provided_decorators,
+        })
+        print '-' * 80
+        print 'ctx'
+        print ctx
+        print '-' * 80
+        print 'enabled_slugs'
+        print enabled_slugs
+        print '-' * 80
+        print 'provided_decorators'
+        print provided_decorators
+        print '-' * 80
+
         return render(request, self.template_name, ctx)
 
 
