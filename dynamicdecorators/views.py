@@ -10,7 +10,7 @@ from dynamicdecorators import session
 def get_general_context():
     return {'decorators': [(d, len(session.get_enabled_decorators(d)))
                            for d in config.get_registered_decorators()],
-    }
+            }
 
 
 class IndexView(View):
@@ -36,17 +36,18 @@ class DetailView(View):
         ctx.update({'slug': slug,
                     'generic_keys': ['function', 'enabled', 'name', 'slug'],
                     'provided_decorators': provided_decorators,
-        })
-        print '-' * 80
-        print 'ctx'
-        print ctx
-        print '-' * 80
-        print 'enabled_slugs'
-        print enabled_slugs
-        print '-' * 80
-        print 'provided_decorators'
-        print provided_decorators
-        print '-' * 80
+                    })
+
+        print('-' * 80)
+        print('ctx')
+        print(ctx)
+        print('-' * 80)
+        print('enabled_slugs')
+        print(enabled_slugs)
+        print('-' * 80)
+        print('provided_decorators')
+        print(provided_decorators)
+        print('-' * 80)
 
         return render(request, self.template_name, ctx)
 
