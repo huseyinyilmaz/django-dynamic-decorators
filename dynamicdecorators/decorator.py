@@ -15,7 +15,7 @@ from dynamicdecorators import config
 from dynamicdecorators import session
 
 
-def _dynamic_decorator(f=None, name=None):
+def _dynamic_decorator(f=None, name=None, **kwargs):
     # If name is not provided try to get name from function.
     if name is None:
         name = utils.get_name(f)
@@ -27,7 +27,8 @@ def _dynamic_decorator(f=None, name=None):
             'for it as argument to decorator like so: '
             '@dynamicdecorators.decorators.my_func_name' % repr(f))
     slug = slugify(name)
-    config.register(slug)
+    meta = kwargs
+    config.Pipeline.register(slug, meta)
 
     @wraps(f)
     def _wrapper(*args, **kwargs):
@@ -43,9 +44,9 @@ def _dynamic_decorator(f=None, name=None):
     return _wrapper
 
 
-def decorate(name):
+def decorate(name, **kwargs):
     if isinstance(name, six.string_types):
-        return partial(_dynamic_decorator, name=name)
+        return partial(_dynamic_decorator, name=name, **kwargs)
     else:
         return _dynamic_decorator(name)
 

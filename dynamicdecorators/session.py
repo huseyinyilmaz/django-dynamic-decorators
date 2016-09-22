@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from dynamicdecorators.config import get_provided_decorators
+from dynamicdecorators import config
 
 
 CACHE = {'request': None,
@@ -14,7 +14,6 @@ def set_request(request):
     CACHE.update({'request': request,
                   'dynamic_decorators': request.session.get(SESSION_KEY, {}),
                   'is_changed': False})
-    print CACHE
 
 
 def clear_request(request):
@@ -58,7 +57,7 @@ def request_store(f):
 
 
 def get_enabled_decorators(slug):
-    decorators = get_provided_decorators()
+    decorators = config.Decorator.get_provided_decorators()
     enabled_slugs = CACHE['dynamic_decorators'].get(slug, [])
     return [d for d in decorators
             if d['slug'] in enabled_slugs]

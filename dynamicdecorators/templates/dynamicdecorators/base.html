@@ -40,8 +40,8 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             {% for d, c in decorators %}
-              <li {% if slug == d %}class="active"{% endif %}>
-                <a href="{% url "dynamicdecorators-detail" slug=d %}">{{ d }}{% if c %}({{c}}){% endif %}</a>
+              <li {% if slug == d.slug %}class="active"{% endif %}>
+                <a href="{% url "dynamicdecorators-detail" slug=d.slug %}">{{ d.slug }}{% if c %}({{c}}){% endif %}</a>
               </li>
             {% endfor %}
           </ul>

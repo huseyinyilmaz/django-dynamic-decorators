@@ -9,7 +9,7 @@ from dynamicdecorators import session
 
 def get_general_context():
     return {'decorators': [(d, len(session.get_enabled_decorators(d)))
-                           for d in config.get_registered_decorators()],
+                           for d in config.Pipeline.get_registered_decorators()],
             }
 
 
@@ -29,7 +29,7 @@ class DetailView(View):
     def get(self, request, slug):
         enabled_slugs = {d['slug']
                          for d in session.get_enabled_decorators(slug)}
-        provided_decorators = config.get_provided_decorators()
+        provided_decorators = config.Decorator.get_provided_decorators()
         for p in provided_decorators:
             p['enabled'] = (p['slug'] in enabled_slugs)
         ctx = get_general_context()
