@@ -46,7 +46,7 @@ After initialization is done in decorators interface there will be 3 sections fo
 Planned Features
 ================
 
-* Web interface that allow users to see users.
+* Web interface that allow users to see all applied interfaces.
 * If disabled, it will not have any performance penalty.
 * There should be a generic permission system, so people should be able to enable it only certain group of people.
 * There should be a list of default decorators provided. Like, `Disable cache` decorator.
@@ -55,3 +55,8 @@ Planned Features
   provide {str: str} type dictionary in settings.
 * Decorators should be activated for whole project with a middleware or it should be activated by marking views one by one.
 * In the ui, there should be list of decorators to choose from also if multiple views are marked there should be list of views to choose from. user should be able to choose view -> decorator list.
+
+
+TODO
+====
+ - Remove Group and add Meta. People should be able to use meta to filter out decorators.

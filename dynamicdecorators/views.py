@@ -5,11 +5,13 @@ from django.shortcuts import redirect
 
 from dynamicdecorators import config
 from dynamicdecorators import session
+from operator import attrgetter
 
 
 def get_general_context():
-    return {'decorators': [(d, len(session.get_enabled_decorators(d)))
-                           for d in config.Pipeline.get_registered_decorators()],
+    return {'pipelines': [(d, len(session.get_enabled_decorators(d.slug)))
+                          for d in sorted(config.get_pipelines(),
+                                          key=attrgetter('slug'))],
             }
 
 
@@ -27,17 +29,15 @@ class DetailView(View):
     template_name = 'dynamicdecorators/detail.html'
 
     def get(self, request, slug):
-        enabled_slugs = {d['slug']
-                         for d in session.get_enabled_decorators(slug)}
-        provided_decorators = config.Decorator.get_provided_decorators()
-        for p in provided_decorators:
-            p['enabled'] = (p['slug'] in enabled_slugs)
+        pipeline = config.get_pipeline_by_slug(slug)
+        enabled_slugs = {d.slug for d in session.get_enabled_decorators(slug)}
+        pipes = config.filter_pipes(pipeline, config.get_pipes())
+        for p in pipes:
+            p.enabled = p.slug in enabled_slugs
         ctx = get_general_context()
         ctx.update({'slug': slug,
-                    'generic_keys': ['function', 'enabled', 'name', 'slug'],
-                    'provided_decorators': provided_decorators,
-                    })
-
+                    'pipes': pipes,
+                    'pipeline': pipeline})
         print('-' * 80)
         print('ctx')
         print(ctx)
@@ -45,8 +45,8 @@ class DetailView(View):
         print('enabled_slugs')
         print(enabled_slugs)
         print('-' * 80)
-        print('provided_decorators')
-        print(provided_decorators)
+        print('pipes')
+        print(pipes)
         print('-' * 80)
 
         return render(request, self.template_name, ctx)

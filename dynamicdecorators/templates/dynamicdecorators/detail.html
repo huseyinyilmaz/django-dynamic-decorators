@@ -3,7 +3,7 @@
 {% block body %}
 
   <div class="panel panel-default">
-    <div class="panel-heading">Panel heading</div>
+    <div class="panel-heading">{{pipeline.name}}</div>
     <table class="table table-bordered">
     <tr>
       <th>Name</th>
@@ -11,25 +11,23 @@
       <th>Meta</th>
     </tr>
 
-    {% for d in provided_decorators %}
+    {% for p in pipes %}
       <tr>
-        <td>{{d.name}}</td>
+        <td>{{p.name}}</td>
         <td>
-          {%if d.enabled %}
-            <a href="{% url "dynamicdecorators-disable" slug d.slug %}"
+          {%if p.enabled %}
+            <a href="{% url "dynamicdecorators-disable" slug p.slug %}"
                class="btn btn-success">Deactivate</a>
           {% else %}
-            <a href="{% url "dynamicdecorators-enable" slug d.slug %}"
+            <a href="{% url "dynamicdecorators-enable" slug p.slug %}"
                class="btn btn-info">Activate</a>
           {% endif %}
         </td>
         <td>
           <table class="table table-condensed table-bordered">
-            {% for k,v in d.iteritems %}
-              {% if k not in generic_keys and v %}
-                <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
-              {% endif %}
-          {% endfor %}
+            {% for k,v in p.meta.iteritems %}
+              <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+            {% endfor %}
           </table>
         </td>
       </tr>
