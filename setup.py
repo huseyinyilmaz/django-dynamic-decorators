@@ -82,7 +82,7 @@ setup(
     zip_safe=False,
     test_suite='setup.runtests',
     tests_require=[
-        'Django>=1.8.0',
+        'Django>=1.7.0',
         'six',
     ]
 )
