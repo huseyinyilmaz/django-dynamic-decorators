@@ -51,6 +51,7 @@ def _dynamic_decorator(f=None, name=None, slug=None, meta=None):
 
 
 def decorate(f=None, name=None, slug=None, **kwargs):
+    """Decorate given function."""
     if f is None:
         return partial(_dynamic_decorator, name=name, slug=slug, meta=kwargs)
     else:
@@ -58,5 +59,8 @@ def decorate(f=None, name=None, slug=None, **kwargs):
 
 
 class Decorators:
+    """Alternative interface for decorator function."""
+
     def __getattr__(self, attr_name):
+        """Call decorate function with attr name as name."""
         return partial(decorate, name=attr_name)

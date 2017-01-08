@@ -6,6 +6,7 @@ from dynamicdecorators import session
 
 
 def dynamicdecorators_middleware(get_response):
+    """Middle ware that decorates every function call."""
     @session.request_store
     @decorate(name='all', slug='dynamic_decorators_middleware')
     def middleware(request):

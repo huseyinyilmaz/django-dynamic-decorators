@@ -1,3 +1,4 @@
+"""Utility functions module."""
 try:
     from django.utils.module_loading import import_string
 except ImportError:
@@ -6,15 +7,14 @@ except ImportError:
 
 
 def compose(*fs):
-    """compose(*functions) -> function.
+    """Compose several functions into one.
 
-    Compose several functions into one.
+    compose(*functions) -> function.
     When called, the composed function passes its arguments to the last function
     in `fs`, then its return value to the one before it and so on.
     compose(f, g, h)(arg) == f(g(h(arg)))
-
     Source: https://github.com/clsr/fun.py/blob/98b7a420ed6bde883bd740643960510cd2e2a6b0/fun.py#L5-L18  # noqa
-"""
+    """
     fs = fs[::-1]
 
     def composed(*args):
@@ -42,7 +42,7 @@ def memoize(func):
 
 
 def get_name(func):
-    """Gets name of a function.
+    """Get name of a function.
 
     If name cannot be generated returns None
     """
@@ -58,7 +58,8 @@ def get_name(func):
 
 @memoize
 def import_function(path):
-    """Gets path of function as string imports it dynamicly.
-       Functions are memoized so they will be loaded only once.
+    """Get path of function as string imports it dynamicly.
+
+    Functions are memoized so they will be loaded only once.
     """
     return import_string(path)
