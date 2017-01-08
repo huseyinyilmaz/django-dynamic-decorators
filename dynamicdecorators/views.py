@@ -57,7 +57,7 @@ class DetailView(View):
         return render(request, self.template_name, ctx)
 
 
-class EneableView(View):
+class EnableView(View):
     """Enable given pipe for given pipeline."""
 
     def get(self, request, slug, decorator):
