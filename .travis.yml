@@ -22,7 +22,6 @@ python:
 #     - "$HOME/virtualenv/python2.7.9"
 env:
   matrix:
-    - DJANGO_VERSION=1.7.0
     - DJANGO_VERSION=1.8.0
     - DJANGO_VERSION=1.9.12
 
